@@ -1,0 +1,553 @@
+A
+|
+|--> A1* : EPSILON SCHEDULING-[10,0.75,30]------> No Batt violations, 
+|                                                 slightly reduced average rewards as compared to A
+|                                                 battery seems to stay above 50% - don't know why
+|==> A1  : SEED TEST (10/10)--not perfect but robust enough
+|
+|--> A1A : EPSILON = 0.95------------------------> worse than A
+|--> A1B : EPSILON = 0.80------------------------> worse than A
+|
+|--> A2  : Equal BLIM_LO and BLIM_HI Penalties---> worse than A
+|
+|--> A3* : Target Update = 6 months--------------> little worse than A1, better than A
+|==> A3  : SEED TEST ( 9/10)---------------------> almost perfect
+|
+|--> A3a : Target Update = 3 months--------------> worse than A
+|--> A3b : Target Update = 9 months--------------> worse than A
+|--> A3c : Target Update = 12 months-------------> worse than A
+|
+|--> A5  : norm_ENP = enp/(BMAX/2)---------------> worse than A
+|--> A6  : Huber Loss----------------------------> a little better than A, a little worse than A1
+|
+|--> A1C : EPSILON SCHEDULING [10,0.75,30]-------> worse than A
+|        : Target Update       6 months-----|
+|
+|--> A1D* : EPSILON SCHEDULING [10,0.75,30]------> No Batt Violations. Better performance than A1
+|         : Huber Loss-----------------------|
+|
+|==> A1D  : SEED TEST (9/10)---------------------> One seed is catastrophic
+|
+|
+|--> A7* : LR SCHEDULING [/\ (3,0,2), \/ 0.8]----> better than A1D
+|==> A7  : SEED TEST ( 10/10)--------------------> TEST PASSED!!!!!!!!
+|
+|
+|
+|
+B*: EPSILON SCHEDULING [10, 0.75, 30]------------> similar to A7. Higher average rewards
+|   LR SCHEDULING      [(3, 0, 2), 30]---|
+|   TRAIN              TKY[2000-2010]----|
+|   HUBER LOSS---------------------------|
+|==> B  : SEED TEST (10/10)--------------------> TEST PASSED!!!!!(Some seeds have violations)
+|
+|
+B1*: EPSILON SCHEDULING [10, 0.75, 30]-------------> higher average rewards than B but one major violation
+|   LR SCHEDULING      [(3, 0, 2), 30]---|
+|   TRAIN              TKY[2000-2010]----|
+|   MSE LOSS-----------------------------|
+|==> B1 : SEED TEST ( 9/10)--------------------> Better than B
+|
+|
+B2: EPSILON SCHEDULING [10, 0.75, 30]-------------> lower average rewards than B but lesser violations too
+|   LR SCHEDULING      [(3, 0, 2), 30]---|
+|   TRAIN              TKY[2000-2010]----|
+|   HUBER LOSS---------------------------|
+|   TARGET UPDATE      [6 months]--------|
+|
+B3: EPSILON SCHEDULING [10, 0.75, 30]-------------> slight degradation in performance
+|   LR SCHEDULING      [(3, 0, 2), 30]---|
+|   TRAIN              TKY[2000-2010]----|
+|   HUBER LOSS---------------------------|
+|   WIDTH              [20]--------------|
+|
+B4: EPSILON SCHEDULING [10, 0.75, 30]-------------> slight degradation in performance
+|   LR SCHEDULING      [(3, 0, 2), 30]---|
+|   TRAIN              TKY[2000-2010]----|
+|   HUBER LOSS---------------------------|
+|   WIDTH              [100]-------------|
+|
+B1A: SIGMOID Activations:-------------------------> weights are kind of weird. Good performance
+|
+|==> B1A : SEED TEST (8/10)----------------------> catastrophic results in some seeds
+|
+|
+B1B: EPSILON SCHEDULING [10, 0.75, 30]-------------> 
+|   LR SCHEDULING      [(3, 0, 2), 30]----|
+|   TRAIN              TKY[2000-2010]-----|
+|   LOSS               [ MSE ]------------|
+|   DEPTH              [1xLeakyRELU]------|
+|   [ip->FC1->LeRELU->FCOUT->op]----------|
+|
+|==> B1B : SEED TEST (8/10)----------------------> catastrophic results in some seeds
+|
+|
+|
+|
+|
+C*: EPSILON SCHEDULING [10, 0.75, 30]-------------> SCRIPT SUPPORT
+|   LR SCHEDULING      [(3, 0, 2), 30]----|
+|   TRAIN              TKY[2000-2010]-----|
+|   LOSS               [ MSE ]------------|
+|   DEPTH              [2xRELU]-----------|
+|   [ip->FC1->RELU->FC2->RELU->FCOUT->op]-| 
+|
+|==> C : SEED TEST (7/10)-----------------------> Not as good as B1 but good
+|
+|
+C1: EPSILON SCHEDULING [10, 0.75, 30]-------------> 
+|                                         |
+|   LR SCHEDULING      [(3, 0, 2), 30]----|
+|   TRAIN              TKY[2000-2010]-----|
+|   LOSS               [ MSE ]------------|
+|   DEPTH              [2xSIGMOID]--------|
+|   [ip->FC1->RELU->FC2->RELU->FCOUT->op]-|  
+|
+|==> C1 : SEED TEST (6/10)----------------------> catastrophic results
+|
+|
+C2: EPSILON SCHEDULING [10, 0.75, 30]-------------> 
+|   LR SCHEDULING      [(3, 0, 2), 30]--------|
+|   TRAIN              TKY[2000-2010]---------|
+|   LOSS               [ MSE ]----------------|
+|   DEPTH              [2xLeRELU]-------------|
+|   [ip->FC1->LeRELU->FC2->LeRELU->FCOUT->op]-|  
+|
+|==> C2 : SEED TEST (6/10)----------------------> 
+|
+|
+C3: EPSILON SCHEDULING [10, 0.75, 30]-------------> 
+|   LR SCHEDULING      [(3, 0, 2), 30]--------|
+|   TRAIN              TKY[2000-2010]---------|
+|   LOSS               [ HUBER ]--------------|
+|   DEPTH              [2xLeRELU]-------------|
+|   [ip->FC1->LeRELU->FC2->LeRELU->FCOUT->op]-|  
+|
+|==> C3 : SEED TEST (6/10)---------------------->
+|
+|
+|
+|-> Sticking with one hidden layer networks. Two layers seem more complicated.
+|-> Best results came with B and B1. 
+|-> Scheduling V1, Reward Function 1a, 1 X RELU, MSE/HUBER
+|=> Maturity at 30 iterations.
+|
+|=> Experiment with different activation functions/loss combinations
+|
+D : Scheduling V1, Reward Function 1a, Update = 18 months, Iterations = 50
+
+D1a1  : Scheduling V1, Reward Function 1a, 18 months, 1 X RELU, MSE      -  7/10
+D1a2  : Scheduling V1, Reward Function 1a, 18 months, 1 X RELU, HUBER    -  5/10
+
+D1b1  : Scheduling V1, Reward Function 1a, 18 months, 1 X SIGMOID, MSE   -  7/10
+D1b2  : Scheduling V1, Reward Function 1a, 18 months, 1 x SIGMOID, HUBER -  6/10
+
+D1c1  : Scheduling V1, Reward Function 1a, 18 months, 1 x LeRELU, MSE    -  6/10
+D1c2* : Scheduling V1, Reward Function 1a, 18 months, 1 x LeRELU, HUBER  - 10/10
+
+D2a1  : Scheduling V1, Reward Function 1a, 18 months, 2 X RELU, MSE      -  3/10
+D2a2  : Scheduling V1, Reward Function 1a, 18 months, 2 X RELU, HUBER    -  5/10
+
+D2b1  : Scheduling V1, Reward Function 1a, 18 months, 2 X SIGMOID, MSE   -  7/10
+D2b2  : Scheduling V1, Reward Function 1a, 18 months, 2 x SIGMOID, HUBER -  5/10
+
+D2c1  : Scheduling V1, Reward Function 1a, 18 months, 2 x LeRELU, MSE    -  6/10
+D2c2  : Scheduling V1, Reward Function 1a, 18 months, 2 x LeRELU, HUBER  -  7/10
+|
+|
+|==> D1c2: LeRELU + Huber seems promising. Will explore later.
+|
+|=> May need longer time for greedier behavior with low learning rate.
+|=> Increase to 100 iterations
+|=> Try longer learning at low learning rate
+|
+|
+H : Scheduling V1, Reward Function 1a, Update = 18 months, Iterations = 100
+|
+H1a1  : Scheduling V1, Reward Function 1a, 18 months, 1 X RELU, MSE      -  7/10
+H1a2  : Scheduling V1, Reward Function 1a, 18 months, 1 X RELU, HUBER    -  5/10
+
+H1b1  : Scheduling V1, Reward Function 1a, 18 months, 1 X SIGMOID, MSE   -  8/10
+H1b2  : Scheduling V1, Reward Function 1a, 18 months, 1 X SIGMOID, HUBER -  7/10
+
+H1c1  : Scheduling V1, Reward Function 1a, 18 months, 1 X LeRELU, MSE    -  7/10
+H1c2* : Scheduling V1, Reward Function 1a, 18 months, 1 X LeRELU, HUBER  - 10/10
+
+H2a1  : Scheduling V1, Reward Function 1a, 18 months, 2 X RELU, MSE      -  6/10
+H2a2  : Scheduling V1, Reward Function 1a, 18 months, 2 X RELU, HUBER    -  7/10
+
+H2b1  : Scheduling V1, Reward Function 1a, 18 months, 2 X SIGMOID, MSE   -  8/10
+H2b2  : Scheduling V1, Reward Function 1a, 18 months, 2 X SIGMOID, HUBER -  3/10
+
+H2c1  : Scheduling V1, Reward Function 1a, 18 months, 2 X LeRELU, MSE    -  4/10
+H2c2  : Scheduling V1, Reward Function 1a, 18 months, 2 X LeRELU, HUBER  -  4/10 
+|
+|
+|==> All results are IDENTICAL results with Dxxx models
+|==> At iteration = 50, LR drops to lower than 1e-5. 
+|==> This obviously seems to have no effect on any further effect on the model weights.
+|==> Increasing iterations does not help
+|
+|=> Increase update rate to 6 months
+|
+|
+E : Scheduling V2, Reward Function 1a, Update = 6 months, Iterations = 100
+|
+E1a1* - Scheduling V1, Reward Function 1a, 6 months, 1 X RELU, MSE     - 10/10
+E1a2* - Scheduling V1, Reward Function 1a, 6 months, 1 X RELU, HUBER   - 10/10
+
+E1b1 - Scheduling V1, Reward Function 1a, 6 months, 1 X SIGMOID, MSE   -  8/10
+E1b2 - Scheduling V1, Reward Function 1a, 6 months, 1 X SIGMOID, HUBER -  7/10
+
+E1c1 - Scheduling V1, Reward Function 1a, 6 months, 1 X LeRELU, MSE    -  7/10
+E1c2 - Scheduling V1, Reward Function 1a, 6 months, 1 X LeRELU, HUBER  -  8/10
+
+E2a1 - Scheduling V1, Reward Function 1a, 6 months, 2 X RELU, MSE      -  6/10
+E2a2 - Scheduling V1, Reward Function 1a, 6 months, 2 X RELU, HUBER    -  7/10
+
+E2b1 - Scheduling V1, Reward Function 1a, 6 months, 2 X SIGMOID, MSE   -  8/10
+E2b2 - Scheduling V1, Reward Function 1a, 6 months, 2 X SIGMOID, HUBER -  3/10
+
+E2c1 - Scheduling V1, Reward Function 1a, 6 months, 2 X LeRELU, MSE    -  4/10
+E2c2 - Scheduling V1, Reward Function 1a, 6 months, 2 X LeRELU, HUBER  -  4/10 
+|
+|
+|==> Increasing the update rate seems to have detrimental effect on LeRELU+Huber
+|==> However, RELU + MSE/HUBER seems to have much better performance.
+|==> Some seeds have catastrophic peformances. I suspect overfitting.
+|==> A large learning rate and low exploration rate too early on in the training might be responsible.
+|==> The initial weight may also be too large.
+|
+|=> Use weight initializations that are NOT xavier/kaiming.
+|
+|
+|~~~~~~~~F: initialization normal (0.01), 3 months update
+|        |
+|        F1a1 - 9/10
+|        F2b1 - 6/10
+|        F1b1 - 5/10
+|        |
+|        |
+|        |==> Very bad performance. Weight initialization is not the problem it seems.
+|        |==> Repeating this experiment with L2 loss might give some insight.
+|
+|
+|=> Since the results vary due to the target update frequency, experiment with different target updates.
+|
+|
+G1 : Scheduling V1, Reward Function 1a, Update = x, Iterations = 100, 1 X RELU, MSE
+|
+G1a  : Scheduling V1, Reward Function 1a, Update = 3,  Iterations = 100, 1 X RELU, MSE -  6/10
+E1a1*: Scheduling V1, Reward Function 1a, Update = 6,  Iterations = 100, 1 X RELU, MSE - 10/10
+G1b  : Scheduling V1, Reward Function 1a, Update = 9,  Iterations = 100, 1 X RELU, MSE -  7/10
+G1c  : Scheduling V1, Reward Function 1a, Update = 12, Iterations = 100, 1 X RELU, MSE -  9/10
+G1d  : Scheduling V1, Reward Function 1a, Update = 18, Iterations = 100, 1 X RELU, MSE -  7/10
+|
+|
+|
+G2 : Scheduling V1, Reward Function 1a, Update = x, Iterations = 100, 1 X RELU, HUBER
+|
+G2a  : Scheduling V1, Reward Function 1a, Update = 3,  Iterations = 100, 1 X RELU, HUBER -  8/10
+E1a2*: Scheduling V1, Reward Function 1a, Update = 6,  Iterations = 100, 1 X RELU, HUBER - 10/10
+G2b  : Scheduling V1, Reward Function 1a, Update = 9,  Iterations = 100, 1 X RELU, HUBER -  7/10
+G2c  : Scheduling V1, Reward Function 1a, Update = 12, Iterations = 100, 1 X RELU, HUBER -  8/10
+G2d  : Scheduling V1, Reward Function 1a, Update = 18, Iterations = 100, 1 X RELU, HUBER -  5/10
+|
+|
+|
+G4 : Scheduling V1, Reward Function 1a, Update = x, Iterations = 50, 1 X LeRELU, HUBER
+|
+G4a  : Scheduling V1, Reward Function 1a, Update =  3, Iterations =  50, 1 X LeRELU, HUBER  - 7/10
+G4b  : Scheduling V1, Reward Function 1a, Update =  6, Iterations =  50, 1 X LeRELU, HUBER  - 6/10
+G4c  : Scheduling V1, Reward Function 1a, Update =  9, Iterations =  50, 1 X LeRELU, HUBER  - 6/10
+G4d  : Scheduling V1, Reward Function 1a, Update = 12, Iterations =  50, 1 X LeRELU, HUBER  - 6/10
+H1c2 : Scheduling V1, Reward Function 1a, Update = 18, Iterations =  50, 1 X LeRELU, HUBER  - 10/10
+|
+|
+|==> RELU activations seems to work best with 6 months update rate
+|==> LeRELU activations seems to work best with 18 months update rate
+|==> I still suspect overfitting.
+|==> Try maturing a bit slower and later
+|
+|=> Scheduling V3
+|=> Change maturity time to 50 iterations.
+|=> Start with a lower EPSILON. Take longer to become greedy.
+|=> LR ~ 0.2e-4 @ EPSILON ~ 0.98, iteration ~ 70
+|
+|
+|
+G3: Scheduling V3, Reward Function 1a, Update = 18, Iterations = 100, 1x RELU,
+|
+G3a* : Scheduling V3, Reward Function 1a, Update = 18, Iterations = 100, 1 X RELU, MSE   -  10/10
+G3b  : Scheduling V3, Reward Function 1a, Update = 18, Iterations = 100, 1 X RELU, HUBER -   9/10
+G3c  : Scheduling V3, Reward Function 1a, Update = 18, Iterations = 100, 1 X LeRELU, HUBER - 7/10
+|
+|
+|==> High duty cycles at Zero battery levels - change reward function
+|
+|
+|=> REWARD FUNCTION
+|=> narrower ENP range
+|=> calculate enp before clipping battery
+|=> negative rewards have download slope instead of flattenning out.
+|
+|      
+I1 - Scheduling V3, Reward Function 1c, Update = 18, Iterations = 100, 1xRELU,MSE  - 10/10 (9/10) -1 BEST SEED:4,6,1,7
+I5 - Scheduling V3, Reward Function 1c, Update =  9, Iterations = 100, 1xRELU,MSE  - 10/10 (9/10) -4
+I2 - Scheduling V3, Reward Function 1c, Update =  6, Iterations = 100, 1xRELU,MSE  -  8/10
+I3 - Scheduling V3, Reward Function 1c, Update =  3, Iterations = 100, 1xRELU,MSE  - 10/10 (3/10)
+I4 - Scheduling V3, Reward Function 1c, Update =  1, Iterations = 100, 1xRELU,MSE  - 10/10 (9/10) -2
+|
+|=> RELU activations with MSE LOSS give good performance
+|
+|
+|
+J: calculate ENP before clipping
+J1 - Scheduling V3, Reward Function 1c, Update = 18, Iterations = 100, 1xRELU, HUBER  -  9/10
+J2 - Scheduling V3, Reward Function 1c, Update =  9, Iterations = 100, 1xRELU, HUBER  -  9/10 
+J3 - Scheduling V3, Reward Function 1c, Update =  6, Iterations = 100, 1xRELU, HUBER  - 10/10 (7/10)
+J4 - Scheduling V3, Reward Function 1c, Update =  3, Iterations = 100, 1xRELU, HUBER  -  8/10 
+J5 - Scheduling V3, Reward Function 1c, Update =  1, Iterations = 100, 1xRELU, HUBER  - 10/10 (8/10)
+|
+|
+|=> RELU activations with HUBER LOSS also give good performance. A tad bit less than MSE loss
+|
+|
+|
+|-------> USELESS EXPERIMENT
+|       L : calculate ENP AFTER clipping
+|       L1 - Scheduling V3, Reward Function 1c, Update = 18, Iterations = 100, 1xRELU,HUBER  - 9/10
+|       L2 - Scheduling V3, Reward Function 1c, Update =  9, Iterations = 100, 1xRELU,HUBER  - 9/10
+|       L3 - Scheduling V3, Reward Function 1c, Update =  6, Iterations = 100, 1xRELU,HUBER  - 9/10
+|       L4 - Scheduling V3, Reward Function 1c, Update =  3, Iterations = 100, 1xRELU,HUBER  - 9/10
+|       L5 - Scheduling V3, Reward Function 1c, Update =  1, Iterations = 100, 1xRELU,HUBER  - 8/10
+| 
+| 
+|
+|
+N: calculate ENP before clipping
+N1 - Scheduling V3, Reward Function 1c, Update = 18, Iterations = 100, 1xLeRELU, HUBER  - 9/10
+N2 - Scheduling V3, Reward Function 1c, Update =  9, Iterations = 100, 1xLeRELU, HUBER  - 9/10
+N3 - Scheduling V3, Reward Function 1c, Update =  6, Iterations = 100, 1xLeRELU, HUBER  - 9/10
+N4 - Scheduling V3, Reward Function 1c, Update =  3, Iterations = 100, 1xLeRELU, HUBER  - 8/10
+N5 - Scheduling V3, Reward Function 1c, Update =  1, Iterations = 100, 1xLeRELU, HUBER  - 9/10
+|
+|-------> USELESS EXPERIMENT
+|       M : calculate ENP AFTER clipping
+|       M1 - Scheduling V3, Reward Function 1c, Update = 18, Iterations = 100, 1xLeRELU, HUBER  - 9/10
+|       M2 - Scheduling V3, Reward Function 1c, Update =  9, Iterations = 100, 1xLeRELU, HUBER  - 9/10
+|       M3 - Scheduling V3, Reward Function 1c, Update =  6, Iterations = 100, 1xLeRELU, HUBER  - 8/10
+|       M4 - Scheduling V3, Reward Function 1c, Update =  3, Iterations = 100, 1xLeRELU, HUBER  - 9/10
+|       M5 - Scheduling V3, Reward Function 1c, Update =  1, Iterations = 100, 1xLeRELU, HUBER  - 9/10
+|       
+|
+|
+|
+K: calculate ENP before clipping
+K1 - Scheduling V3, Reward Function 1c, Update = 18, Iterations = 100, 1xSIGMOID, MSE  - 6/10
+K2 - Scheduling V3, Reward Function 1c, Update =  6, Iterations = 100, 1xSIGMOID, MSE  - 4/10
+K3 - Scheduling V3, Reward Function 1c, Update =  3, Iterations = 100, 1xSIGMOID, MSE  - 7/10
+K4 - Scheduling V3, Reward Function 1c, Update =  1, Iterations = 100, 1xSIGMOID, MSE  - 8/10
+|
+|==> SIGMOID activations are not good for this job
+|
+|
+|
+O: Scheduling V3, Reward Function 1c, Update = 18, Iterations = 100, 1xRELU,MSE
+O1: WT_DECAY = 1e-5 - 8/10
+O2: WT_DECAY = 1e-4 - 8/10
+O3: WT_DECAY = 1e-3 - 6/10
+O4: WT_DECAY = 1e-2 - 0/10
+O5: WT_DECAY = 1e-1 - 2/10
+O6: WT_DECAY = 1e-6 - 6/10
+O7: WT_DECAY = 1e-7 - 7/10
+O8: WT_DECAY = 1e-8 - 9/10
+|
+|=> L2 REgularization does not increase performance
+|
+|
+|
+|===========USING I1 AS CHECKPOINT==============|
+|
+|
+P: Increasing WIDTH 
+Scheduling V3, Reward Function 1c, Update = 18, Iterations = 100, 1xRELU,MSE, WT_DECAY=None
+P1 - WIDTH = 20  = 8/10
+P2 - WIDTH = 50  = 10/10 = I1
+P3 - WIDTH = 100 = 10/10 (9/10)
+P4 - WIDTH = 200 = 9/10
+|
+|
+|=> Increasing WIDTH has little effect.
+|=> P3 seems as good as I1
+|
+Q: Removing extra violations in reward function
+Scheduling V3, Reward Function 1c, Update = 18, Iterations = 100, 1xRELU,MSE, WT_DECAY=None
+|
+|
+Q1 - No violations at all                                          - (9/10)
+Q2 - DAY Violations + BATTLIM_LO/BATTLIM_HI have equal penalties   - (9/10)
+Q3 - Reward FUnction 1d, No violations                             - (10/10)
+Q4 - Reward FUnction 1d, Day violations + BATTLIM_LO > BATTLIM_HI  - (8/10)
+|
+S: Reward Function 1d, No violations, Change Memory
+S1: Memory = 6 months - (9/10)
+S2: Memory = 1 year   - (9/10)
+S3: Memory = 3 years  - (10/10)
+S4: Memory = 4 years  - (9/10)
+|
+
+|
+T: 
+
+
+
+
+**************************************************************
+A1
+**************************************************************
+                       
+HYPOTHESIS:
+Constant high EPSILON may reduce performance
+
+MODEL:
+A1 : INPUT->FC1->RELU->FC_OUT->OUTPUT
+LOSS : MSE
+
+LEARNING:   INIT_WEIGHT     = FC1 : KAIMING
+                              OUT : XAVIER
+            WIDTH           = 50
+            DEPTH           = 1 + 1
+            WEIGHT_DECAY    = NONE
+            LR              = 1e-4
+            UPDATE_FREQ     = 18 MONTHS
+            MEMORY          = 24 MONTHS
+            ITERATION       = 50
+            BATCH_SIZE      = 32
+            EPSILON         = EPSILON SCHEDULING-[0.762 to 0.967]             
+            GAMMA           = 0.9                
+            LAMBDA          = 0.95
+            
+TRAINING:   TOKYO[2010]
+            BATTERY_RESET    = 0 %
+            REWARD_FUNC      = TYPE1
+                               violation_penalty = 3
+                               battery high limit penalty = -2
+                               battery low  limit penalty = -4
+                               R = [-1 to 2] bell curve
+            REWARD_BROADCAST = TRUE
+            
+            LAST TRAINING ITERATIONS = N/A
+            EPSILON                  = N/A
+            LR                       = N/A
+            
+TESTING:    TOKYO[2000-2018]
+            GREEDY POLICY
+
+
+***************************
+RESULTS
+***************************
+SEED: 161
+YEAR	AVG_RWD		VIOLATIONS
+                    DAY	BATT
+2000	 1.33		0	 0
+2001	 1.33		0	 0
+2002	 1.27		1	 0
+2003	 1.32		1	 0
+2004	 1.23		4	 0
+2005	 1.31		1	 0
+2006	 1.36		0	 0
+2007	 1.3		3	 0
+2008	 1.31		2	 0
+2009	 1.32		0	 0
+2010	 1.26		2	 0
+2011	 1.29		2	 0
+2012	 1.26		2	 0
+2013	 1.21		5	 0
+2014	 1.23		4	 0
+2015	 1.32		0	 0
+2016	 1.27		5	 0
+2017	 1.19		4	 0
+
+***************************
+DISCUSSION AND CONCLUSIONS
+***************************
+Weights dont' explode.
+Battery stays well above of BLIM
+
+**************************************************************
+A
+**************************************************************
+Restarting from scratch.
+BMAX = 10000
+                       
+HYPOTHESIS:
+Starting from a bare minimum and experimenting with hyper parameters
+
+MODEL:
+A : INPUT->FC1->RELU->FC_OUT->OUTPUT
+LOSS : MSE
+
+LEARNING:   INIT_WEIGHT     = FC1 : KAIMING
+                              OUT : XAVIER
+            WIDTH           = 50
+            DEPTH           = 1 + 1
+            WEIGHT_DECAY    = NONE
+            LR              = 1e-4
+            UPDATE_FREQ     = 18 MONTHS
+            MEMORY          = 24 MONTHS
+            ITERATION       = 50
+            BATCH_SIZE      = 32
+            EPSILON         = 0.9             
+            GAMMA           = 0.9                
+            LAMBDA          = 0.95
+            
+TRAINING:   TOKYO[2010]
+            BATTERY_RESET    = 0 %
+            REWARD_FUNC      = TYPE1
+                               violation_penalty = 3
+                               battery high limit penalty = -2
+                               battery low  limit penalty = -4
+                               R = [-1 to 2] bell curve
+            REWARD_BROADCAST = TRUE
+            
+            LAST TRAINING ITERATIONS = N/A
+            EPSILON                  = N/A
+            LR                       = N/A
+            
+TESTING:    TOKYO[2000-2018]
+            GREEDY POLICY
+
+
+***************************
+RESULTS
+***************************
+SEED: 161
+YEAR	AVG_RWD		VIOLATIONS
+                    DAY	BATT
+2000	 1.37		0	 0
+2001	 1.38		0	 0
+2002	 1.34		1	 0
+2003	 1.35		1	 0
+2004	 1.29		5	 3
+2005	 1.34		1	 0
+2006	 1.39		0	 0
+2007	 1.32		5	 2
+2008	 1.35		2	 0
+2009	 1.36		2	 0
+2010	 1.32		3	 0
+2011	 1.28		7	 3
+2012	 1.31		3	 1
+2013	 1.3		6	 0
+2014	 1.26		8	 0
+2015	 1.35		2	 1
+2016	 1.29		7	 3
+2017	 1.3		5	 0
+
+
+***************************
+DISCUSSION AND CONCLUSIONS
+***************************
+Weights dont' explode.
+Battery stays well above of BLIM
