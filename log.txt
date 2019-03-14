@@ -1,10 +1,10 @@
 |
 |
-A  : Vary Batch Size 
-A1 : BATCH_SIZE = 24
-A2 : BATCH_SIZE = 32
-A3 : BATCH_SIZE = 48
-A4 : BATCH_SIZE = 64
+A       : Vary Batch Size 
+A1      : BATCH_SIZE = 24 - (10/10)
+A2 = S3 : BATCH_SIZE = 32 - (10/10)
+A3      : BATCH_SIZE = 48 -  (8/10)
+A4      : BATCH_SIZE = 64 - 
 |
 |
 ********************************************************************
