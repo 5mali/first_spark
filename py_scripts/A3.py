@@ -585,7 +585,7 @@ for iteration in range(NO_OF_ITERATIONS):
         transition_rec[capm.eno.hr-1,:] = temp_transitions
 
         if (day_end):
-            transition_rec[:,5] += r #broadcast reward to all states
+            transition_rec[:,5]  = r #broadcast reward to all states
             decay_factor         = [i for i in (LAMBDA**n for n in reversed(range(0, capm.eno.TIME_STEPS)))]
             transition_rec[:,5]  = transition_rec[:,5] * decay_factor #decay reward proportionately
             dqn.store_day_transition(transition_rec)
